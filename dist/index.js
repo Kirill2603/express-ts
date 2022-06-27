@@ -14,7 +14,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const mongoose_1 = __importDefault(require("mongoose"));
-const body_parser_1 = __importDefault(require("body-parser"));
 const router_1 = __importDefault(require("./rotes/router"));
 const app = (0, express_1.default)();
 const port = 3000;
@@ -25,7 +24,7 @@ const DB_URL = 'mongodb+srv://kirill:kirill@cluster0.c5o7vvn.mongodb.net/todolis
 // app.get('/user', (req: Request, res: Response) => {
 //   res.send('asdasdasdasd')
 // })
-app.use(body_parser_1.default.json());
+app.use(express_1.default.json());
 app.use('/api', router_1.default);
 app.listen(port, () => __awaiter(void 0, void 0, void 0, function* () {
     try {

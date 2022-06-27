@@ -1,6 +1,5 @@
 import express, { Express, Request, Response } from 'express'
 import mongoose from 'mongoose'
-import bodyParser from 'body-parser'
 import router from './rotes/router'
 
 const app: Express = express()
@@ -14,7 +13,7 @@ const DB_URL = 'mongodb+srv://kirill:kirill@cluster0.c5o7vvn.mongodb.net/todolis
 //   res.send('asdasdasdasd')
 // })
 
-app.use(bodyParser.json())
+app.use(express.json())
 app.use('/api', router)
 
 app.listen(port, async () => {
