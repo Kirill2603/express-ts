@@ -13,18 +13,30 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const userModel_1 = require("../models/userModel/userModel");
 const router = express_1.default.Router();
-router.get('/user', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.get('/users', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        res.send('user');
-        // res.send(await User.find({}))
+        res.send(yield userModel_1.user.find({}));
     }
     catch (e) {
         res.statusCode = 500;
         res.send(e.message);
     }
 }));
-router.get('/user/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.post('/users', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        console.log(req.body);
+        const newUser = yield userModel_1.user.create(req.body);
+        res.send(newUser);
+    }
+    catch (e) {
+        console.log(req.body);
+        res.statusCode = 500;
+        res.send(e.message);
+    }
+}));
+router.get('/users/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         res.send('user: id');
         // const User = await User.findOne({name: req.params.id})
