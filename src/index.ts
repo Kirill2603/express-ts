@@ -1,20 +1,19 @@
 import express, { Express, Request, Response } from 'express'
 import mongoose from 'mongoose'
-import router from './rotes/router'
+import usersRouter from './rotes/router'
 
 const app: Express = express()
 const port = 3000
-const DB_URL = 'mongodb+srv://kirill:kirill@cluster0.c5o7vvn.mongodb.net/todolistDB?retryWrites=true&w=majority'
+const DB_URL = 'mongodb+srv://kirill:kirill@cluster0.uhtjuss.mongodb.net/todolistDB?retryWrites=true&w=majority'
 
-// app.get('/', (req: Request, res: Response) => {
-//   res.send('Express + TypeScript Server')
-// })
-// app.get('/user', (req: Request, res: Response) => {
-//   res.send('asdasdasdasd')
-// })
-
+// app.get('*', (req, res) => {
+//   res.statusCode = 404
+//   res.send('what???')
+// });
+// app.use(express.urlencoded)
 app.use(express.json())
-app.use('/api', router)
+app.use(express.urlencoded({extended: false}))
+app.use('/api', usersRouter)
 
 app.listen(port, async () => {
   try {

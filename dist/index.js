@@ -17,14 +17,14 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const router_1 = __importDefault(require("./rotes/router"));
 const app = (0, express_1.default)();
 const port = 3000;
-const DB_URL = 'mongodb+srv://kirill:kirill@cluster0.c5o7vvn.mongodb.net/todolistDB?retryWrites=true&w=majority';
-// app.get('/', (req: Request, res: Response) => {
-//   res.send('Express + TypeScript Server')
-// })
-// app.get('/user', (req: Request, res: Response) => {
-//   res.send('asdasdasdasd')
-// })
+const DB_URL = 'mongodb+srv://kirill:kirill@cluster0.uhtjuss.mongodb.net/todolistDB?retryWrites=true&w=majority';
+// app.get('*', (req, res) => {
+//   res.statusCode = 404
+//   res.send('what???')
+// });
+// app.use(express.urlencoded)
 app.use(express_1.default.json());
+app.use(express_1.default.urlencoded({ extended: false }));
 app.use('/api', router_1.default);
 app.listen(port, () => __awaiter(void 0, void 0, void 0, function* () {
     try {

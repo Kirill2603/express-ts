@@ -14,15 +14,20 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const userModel_1 = require("../models/userModel/userModel");
-const usersRouter = express_1.default.Router({ mergeParams: true });
+const usersRouter = express_1.default.Router();
+usersRouter.get('/users:name', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        res.send('user: name');
+        // res.send(await user.findOne({name: req.params.id}))
+    }
+    catch (e) {
+        res.statusCode = 500;
+        res.send(e.message);
+    }
+}));
 usersRouter.get('/users', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        if (req.query.id) {
-            res.send(yield userModel_1.user.findById({ _id: req.query.id }));
-        }
-        else {
-            res.send(yield userModel_1.user.find({}));
-        }
+        res.send(yield userModel_1.user.find({}));
     }
     catch (e) {
         res.statusCode = 500;
@@ -31,25 +36,12 @@ usersRouter.get('/users', (req, res) => __awaiter(void 0, void 0, void 0, functi
 }));
 usersRouter.post('/users', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        console.log(req.body);
         const newUser = yield userModel_1.user.create(req.body);
         res.send(newUser);
     }
     catch (e) {
-        res.statusCode = 500;
-        res.send(e.message);
-    }
-}));
-usersRouter.delete('/users', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        res.send(yield userModel_1.user.findByIdAndDelete({ _id: req.query.id }, (err) => {
-            if (err) {
-                res.statusCode = 500;
-                res.send('User not found');
-            }
-        }));
-    }
-    catch (e) {
-        console.log(e);
+        console.log(req.body);
         res.statusCode = 500;
         res.send(e.message);
     }

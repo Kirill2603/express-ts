@@ -1,38 +1,45 @@
 import express, { Request, Response } from 'express'
 import { user } from '../models/userModel/userModel'
 
-const router = express.Router()
+const usersRouter = express.Router({mergeParams: true})
 
-router.get('/users', async (req: Request, res: Response) => {
+usersRouter.get('/users', async (req, res) => {
   try {
-    res.send(await user.find({}))
+    if (req.query.id) {
+      res.send(await user.findById({_id: req.query.id}))
+    } else {
+      res.send(await user.find({}))
+    }
   } catch (e: any) {
     res.statusCode = 500
     res.send(e.message)
   }
 })
 
-router.post('/users', async (req: Request, res: Response) => {
+usersRouter.post('/users', async (req, res) => {
   try {
-    console.log(req.body)
     const newUser = await user.create(req.body)
     res.send(newUser)
   } catch (e: any) {
-    console.log(req.body)
     res.statusCode = 500
     res.send(e.message)
   }
 })
 
-router.get('/users/:id', async (req: Request, res: Response) => {
+usersRouter.delete('/users', async (req, res) => {
   try {
-    res.send('user: id')
-    // const User = await User.findOne({name: req.params.id})
-    // res.send(User)
+    res.send(await user.findByIdAndDelete({_id: req.query.id}, (err: any, ) => {
+        if (err){
+          res.statusCode = 500
+          res.send('User not found')
+        }
+    }))
+
   } catch (e: any) {
+    console.log(e)
     res.statusCode = 500
     res.send(e.message)
   }
 })
 
-export default router
+export default usersRouter
