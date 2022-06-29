@@ -49,9 +49,20 @@ usersRouter.delete('/users', (req, res) => __awaiter(void 0, void 0, void 0, fun
         }));
     }
     catch (e) {
-        console.log(e);
         res.statusCode = 500;
         res.send(e.message);
     }
+}));
+usersRouter.put('/users/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    userModel_1.user.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+        strictQuery: true,
+        runValidators: true,
+    }, (err, user) => {
+        if (err) {
+            res.send(err);
+        }
+        res.send(`Name: ${user.name}, email: ${user.email}`);
+    });
 }));
 exports.default = usersRouter;
