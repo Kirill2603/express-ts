@@ -32,6 +32,15 @@ router.get('/users/:id', (req, res) => __awaiter(void 0, void 0, void 0, functio
         res.send(e.message);
     }
 }));
+router.get('/users', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        res.send(yield userModel_1.user.find({}));
+    }
+    catch (e) {
+        res.statusCode = 500;
+        res.send(e.message);
+    }
+}));
 router.post('/users', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const newUser = yield userModel_1.user.create(req.body);

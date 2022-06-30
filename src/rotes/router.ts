@@ -20,6 +20,16 @@ router.get('/users/:id', async (req, res) => {
   }
 })
 
+router.get('/users', async (req, res) => {
+  try {
+      res.send(await user.find({}))
+  } catch (e: any) {
+    res.statusCode = 500
+    res.send(e.message)
+  }
+})
+
+
 router.post('/users', async (req, res) => {
   try {
     const newUser = await user.create(req.body)
