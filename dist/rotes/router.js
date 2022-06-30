@@ -13,9 +13,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const userModel_1 = require("../models/userModel/userModel");
-const usersRouter = express_1.default.Router({ mergeParams: true });
-usersRouter.get('/users/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const userModel_1 = require("../models/userModel");
+const todolistModel_1 = require("../models/todolistModel");
+const router = express_1.default.Router({ mergeParams: true });
+router.get('/users/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         if (req.params.id) {
             res.send(yield userModel_1.user.findById({ _id: req.params.id }));
@@ -29,7 +30,7 @@ usersRouter.get('/users/:id', (req, res) => __awaiter(void 0, void 0, void 0, fu
         res.send(e.message);
     }
 }));
-usersRouter.post('/users', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.post('/users', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const newUser = yield userModel_1.user.create(req.body);
         res.send(newUser);
@@ -39,7 +40,7 @@ usersRouter.post('/users', (req, res) => __awaiter(void 0, void 0, void 0, funct
         res.send(e.message);
     }
 }));
-usersRouter.delete('/users/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.delete('/users/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         res.send(yield userModel_1.user.findByIdAndDelete({ _id: req.params.id }, (err) => {
             if (err) {
@@ -53,7 +54,7 @@ usersRouter.delete('/users/:id', (req, res) => __awaiter(void 0, void 0, void 0,
         res.send(e.message);
     }
 }));
-usersRouter.put('/users/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+router.put('/users/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     userModel_1.user.findByIdAndUpdate(req.params.id, { '$set': req.body }, {
         new: true,
         runValidators: true,
@@ -65,4 +66,43 @@ usersRouter.put('/users/:id', (req, res) => __awaiter(void 0, void 0, void 0, fu
         res.send(user);
     });
 }));
-exports.default = usersRouter;
+router.get('/users/:id/todolists', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        res.send(yield todolistModel_1.todolist.find({ user_id: req.params.id }));
+    }
+    catch (e) {
+        res.statusCode = 500;
+        res.send(e.message);
+    }
+}));
+router.post('/users/:id/todolists', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        res.send(yield todolistModel_1.todolist.create(Object.assign({ user_id: req.params.id }, req.body)));
+    }
+    catch (e) {
+        res.statusCode = 500;
+        res.send(e.message);
+    }
+}));
+router.delete('/users/:id/todolists/:todolistId', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        res.send(yield todolistModel_1.todolist.findByIdAndDelete(req.params.todolistId));
+    }
+    catch (e) {
+        res.statusCode = 500;
+        res.send(e.message);
+    }
+}));
+router.put('/users/:id/todolists/:todolistId', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    todolistModel_1.todolist.findByIdAndUpdate(req.params.todolistId, { '$set': req.body }, {
+        new: true,
+        runValidators: true,
+        strictQuery: true,
+    }, (err, todolist) => {
+        if (err) {
+            res.send(err.message);
+        }
+        res.send(todolist);
+    });
+}));
+exports.default = router;

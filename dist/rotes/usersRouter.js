@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const userModel_1 = require("../models/userModel/userModel");
+const userModel_1 = require("../models/userModel");
 const usersRouter = express_1.default.Router();
 usersRouter.get('/users:name', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
