@@ -15,10 +15,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const userModel_1 = require("../models/userModel/userModel");
 const usersRouter = express_1.default.Router({ mergeParams: true });
-usersRouter.get('/users', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+usersRouter.get('/users/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        if (req.query.id) {
-            res.send(yield userModel_1.user.findById({ _id: req.query.id }));
+        if (req.params.id) {
+            res.send(yield userModel_1.user.findById({ _id: req.params.id }));
         }
         else {
             res.send(yield userModel_1.user.find({}));
@@ -39,9 +39,9 @@ usersRouter.post('/users', (req, res) => __awaiter(void 0, void 0, void 0, funct
         res.send(e.message);
     }
 }));
-usersRouter.delete('/users', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+usersRouter.delete('/users/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        res.send(yield userModel_1.user.findByIdAndDelete({ _id: req.query.id }, (err) => {
+        res.send(yield userModel_1.user.findByIdAndDelete({ _id: req.params.id }, (err) => {
             if (err) {
                 res.statusCode = 500;
                 res.send('User not found');
@@ -54,15 +54,15 @@ usersRouter.delete('/users', (req, res) => __awaiter(void 0, void 0, void 0, fun
     }
 }));
 usersRouter.put('/users/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    userModel_1.user.findByIdAndUpdate(req.params.id, req.body, {
+    userModel_1.user.findByIdAndUpdate(req.params.id, { '$set': req.body }, {
         new: true,
-        strictQuery: true,
         runValidators: true,
+        strictQuery: true,
     }, (err, user) => {
         if (err) {
-            res.send(err);
+            res.send(err.message);
         }
-        res.send(`Name: ${user.name}, email: ${user.email}`);
+        res.send(user);
     });
 }));
 exports.default = usersRouter;

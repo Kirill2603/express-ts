@@ -29,6 +29,7 @@ app.use('/api', router_1.default);
 app.listen(port, () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield mongoose_1.default.connect(DB_URL);
+        mongoose_1.default.set('runValidators', true);
         console.log(`⚡️[server]: Server is running at https://localhost:${port}`);
     }
     catch (e) {

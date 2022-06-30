@@ -26,8 +26,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.user = void 0;
 const mongoose = __importStar(require("mongoose"));
 const UserSchema = new mongoose.Schema({
-    name: { type: String, required: true, min: 3, max: 100, validate: [] },
-    email: { type: String, required: true, min: 5, max: 100 },
+    name: { type: String, required: true, minLength: 3, maxLength: 100, validate: [] },
+    email: { type: String, required: true, minLength: 5, maxLength: 100 },
     todolists: [{ type: mongoose.Schema.Types.ObjectId }]
 }, { collection: 'users' });
 exports.user = mongoose.model('user', UserSchema);

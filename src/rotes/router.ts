@@ -3,10 +3,10 @@ import { user } from '../models/userModel/userModel'
 
 const usersRouter = express.Router({ mergeParams: true })
 
-usersRouter.get('/users', async (req, res) => {
+usersRouter.get('/users/:id', async (req, res) => {
   try {
-    if (req.query.id) {
-      res.send(await user.findById({ _id: req.query.id }))
+    if (req.params.id) {
+      res.send(await user.findById({ _id: req.params.id }))
     } else {
       res.send(await user.find({}))
     }
@@ -26,9 +26,9 @@ usersRouter.post('/users', async (req, res) => {
   }
 })
 
-usersRouter.delete('/users', async (req, res) => {
+usersRouter.delete('/users/:id', async (req, res) => {
   try {
-    res.send(await user.findByIdAndDelete({ _id: req.query.id }, (err: any) => {
+    res.send(await user.findByIdAndDelete({ _id: req.params.id }, (err: any) => {
       if (err) {
         res.statusCode = 500
         res.send('User not found')
@@ -43,17 +43,17 @@ usersRouter.delete('/users', async (req, res) => {
 usersRouter.put('/users/:id', async (req, res) => {
   user.findByIdAndUpdate(
     req.params.id,
-    req.body,
+    { '$set': req.body },
     {
       new: true,
-      strictQuery: true,
       runValidators: true,
+      strictQuery: true,
     },
     (err: any, user: any) => {
       if (err) {
-        res.send(err)
+        res.send(err.message)
       }
-      res.send(`Name: ${user.name}, email: ${user.email}`)
+      res.send(user)
     })
 })
 

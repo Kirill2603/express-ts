@@ -18,6 +18,7 @@ app.use('/api', usersRouter)
 app.listen(port, async () => {
   try {
     await mongoose.connect(DB_URL)
+    mongoose.set('runValidators', true)
     console.log(`⚡️[server]: Server is running at https://localhost:${port}`)
   } catch (e) {
     console.log(e)
