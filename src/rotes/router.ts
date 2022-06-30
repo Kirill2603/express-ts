@@ -1,8 +1,11 @@
 import express, { Request, Response } from 'express'
 import { user } from '../models/userModel'
 import { todolist } from '../models/todolistModel'
+import { task } from '../models/taskModel'
 
 const router = express.Router({ mergeParams: true })
+
+//users--------------------------------
 
 router.get('/users/:id', async (req, res) => {
   try {
@@ -58,6 +61,8 @@ router.put('/users/:id', async (req, res) => {
     })
 })
 
+//todolists--------------------------------
+
 router.get('/users/:id/todolists', async (req, res) => {
   try {
     res.send(await todolist.find({ user_id: req.params.id }))
@@ -99,6 +104,52 @@ router.put('/users/:id/todolists/:todolistId', async (req, res) => {
         res.send(err.message)
       }
       res.send(todolist)
+    })
+})
+
+//tasks--------------------------------
+
+router.post('/users/:id/todolists/:todolistId/tasks', async (req, res) => {
+  try {
+    res.send(await task.create({ todolist_id: req.params.todolistId, ...req.body }))
+  } catch (e: any) {
+    res.statusCode = 500
+    res.send(e.message)
+  }
+})
+
+router.get('/users/:id/todolists/:todolistId/tasks', async (req, res) => {
+  try {
+    res.send(await task.find({ todolist_id: req.params.todolistId }))
+  } catch (e: any) {
+    res.statusCode = 500
+    res.send(e.message)
+  }
+})
+
+router.delete('/users/:id/todolists/:todolistId/tasks/:taskId', async (req, res) => {
+  try {
+    res.send(await task.findByIdAndDelete(req.params.taskId))
+  } catch (e: any) {
+    res.statusCode = 500
+    res.send(e.message)
+  }
+})
+
+router.put('/users/:id/todolists/:todolistId/tasks/:taskId', async (req, res) => {
+  task.findByIdAndUpdate(
+    req.params.taskId,
+    { '$set': req.body },
+    {
+      new: true,
+      runValidators: true,
+      strictQuery: true,
+    },
+    (err: any, task: any) => {
+      if (err) {
+        res.send(err.message)
+      }
+      res.send(task)
     })
 })
 
